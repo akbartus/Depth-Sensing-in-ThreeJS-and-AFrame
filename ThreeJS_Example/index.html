@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FastDepth</title>
+    <!-- Import @tensorflow/tfjs or @tensorflow/tfjs-core -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+    <!-- Adds the WASM backend to the global backend registry -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm/dist/tf-backend-wasm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+      #canvas {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background-color: rgb(250, 244, 250);
+        z-index: 2;
+        width: 100px;
+        height: 100px;
+        padding: 0;
+      }
+      body {
+        margin: 0;
+      }
+      canvas {
+        width: 100vw;
+        height: 100vh;
+        display: block;
+      }
+      button {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3;
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="canvas"></canvas>
+    <video
+      id="video"
+      autoplay
+      loop
+      muted
+      playsinline
+      style="display: none"
+    ></video>
+    <button id="getDepth">Get Depth</button>
+    <canvas id="canvas2"></canvas>
+    <script src="depth.js"></script>
+  </body>
+</html>
