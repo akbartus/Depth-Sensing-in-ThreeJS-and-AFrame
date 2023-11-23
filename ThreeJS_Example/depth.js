@@ -84,7 +84,7 @@ async function main() {
   const renderer = new THREE.WebGLRenderer({ canvas: depthCanvas, antialias: true });
   renderer.setClearColor(0xffffff);
   const fov = 45;
-  const aspect = 0.5; // desktop aspect ration 2/1
+  const aspect = 0.5; // desktop aspect ratio 2/1
   const near = 1;
   const far = 100;
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
