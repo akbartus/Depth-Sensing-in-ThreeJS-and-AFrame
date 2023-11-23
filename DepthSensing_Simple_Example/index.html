@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Depth Sensing on the Browser using FastDepth</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/4.12.0/tf.min.js"></script>
+    <style>
+        #canvas {
+            max-width: calc(50% - 100px);
+            background-color: rgb(250, 244, 250);
+            z-index: -1;
+            transform: scaleX(-1);
+            margin: 10px 0px 0px 10px;
+            box-sizing: border-box;
+            border-radius: 6px;
+            width: 300px;
+            height: 300px;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="position:relative">
+        <center>
+            <video id="video"></video>
+            <canvas id="canvas"></canvas>
+            <button class="learn-more" onclick="predict()">Predict</button>
+        </center>
+    </div>
+    <script>
+        const w = 300, h = 300;
+        const video = document.getElementById("video");
+        [video.width, video.height] = [w, h];
+        let model;
+        const load = async () => {
+            const url = "128x160_fp16/model.json";
+            model = await tf.loadGraphModel(url);
+            console.log("Model loaded");
+        };
+        load();
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        let vidStream = null;
+        let cam = "environment";
+        const constraints = { video: { width: { exact: w }, height: { exact: h } }, audio: false };
+        navigator.getUserMedia(constraints, (stream) => {
+            vidStream = stream;
+            video.srcObject = stream;
+            video.play();
+        }, (error) => {
+            console.log(error);
+        });
+        const canvas = document.getElementById("canvas");
+        [canvas.width, canvas.height] = [w, h];
+        const ctx = canvas.getContext("2d");
+        async function predict() {
+            console.log("Done");
+            const image = tf.browser.fromPixels(video).resizeBilinear([128, 160]).asType('float32').div(255);
+            const batchedImg = image.expandDims(0);
+            const result = await model.predict(batchedImg);
+            const outReshape = tf.reshape(result, [128, 160, 1]);
+            const outResize = tf.mul(tf.div(outReshape, tf.max(outReshape)), 255).asType('int32');
+            await tf.browser.toPixels(outResize, canvas);
+            requestAnimationFrame(predict);
+        }
+    </script>
+</body>
+
+</html>
