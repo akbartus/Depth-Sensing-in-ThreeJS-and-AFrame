@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm/dist/tf-backend-wasm.js"></script>
+    <script src="depthsensing-component.js"></script>
+</head>
+<body>
+        <a-scene renderer="antialias:true;">
+            <a-camera position="0 0 0" fov="45" aspect="1" near="1" far="100">
+                <a-entity depth-sensing="modelSrc: 224x224_fp32/model.json; tensorWidth: 224; tensorHeight: 224; pixelSkipNumber:2; spreadValue: 1; depthValue: 1; smoothingFactor: 0.5; pointSize: 8.0" position="0 0 -3"></a-entity>
+            </a-camera>
+        </a-scene>
+    </body>
+</html>
